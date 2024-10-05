@@ -1,5 +1,4 @@
 const API_KEY = 'b7c2df8c530350b3c0834ac4506e1d7b';
-
 const cityInput = document.getElementById('city');
 const searchBtn = document.getElementById('searchBtn');
 const locationBtn = document.getElementById('locationBtn');
@@ -12,11 +11,14 @@ const weatherDescription = document.getElementById('weatherDescription');
 const currentWeatherContainer = document.getElementById('currentWeatherContainer');
 const forecastContainer = document.getElementById('forecastContainer');
 const forecastCards = document.getElementById('forecastCards');
+const recentSearchesContainer = document.getElementById('recentSearchesContainer');
+const recentSearches = document.getElementById('recentSearches');
 
 searchBtn.addEventListener('click', () => {
     const city = cityInput.value.trim();
     if (city) {
         getWeatherByCity(city);
+        saveToLocalStorage(city);
     }
 });
 
@@ -111,6 +113,40 @@ function displayForecast(data) {
 
     forecastContainer.classList.remove('hidden');
 }
+
+function saveToLocalStorage(city) {
+    let cities = JSON.parse(localStorage.getItem('recentCities')) || [];
+    if (!cities.includes(city)) {
+        cities.push(city);
+        localStorage.setItem('recentCities', JSON.stringify(cities));
+        updateRecentSearchesDropdown(cities);
+    }
+}
+
+function updateRecentSearchesDropdown(cities) {
+    recentSearches.innerHTML = '';
+    cities.forEach(city => {
+        const option = document.createElement('option');
+        option.value = city;
+        option.textContent = city;
+        recentSearches.appendChild(option);
+    });
+    recentSearchesContainer.classList.remove('hidden');
+}
+
+window.onload = function () {
+    const cities = JSON.parse(localStorage.getItem('recentCities')) || [];
+    if (cities.length > 0) {
+        updateRecentSearchesDropdown(cities);
+    }
+
+    recentSearches.addEventListener('change', () => {
+        const selectedCity = recentSearches.value;
+        if (selectedCity) {
+            getWeatherByCity(selectedCity);
+        }
+    });
+};
 
 function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
