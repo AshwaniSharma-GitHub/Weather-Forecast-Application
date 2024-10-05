@@ -61,7 +61,7 @@
     </div>
         <!-- Output Section -->
         <div class="w-full lg:w-3/5 p-8 lg:p-12 flex flex-col items-center justify-center space-y-8" id="outputSection">
-            <div id="currentWeatherContainer" class="floating-card w-full max-w-lg text-center text-black p-8">
+            <div id="currentWeatherContainer" class="hidden floating-card w-full max-w-lg text-center text-black p-8">
                 <div class="flex flex-col md:flex-row items-center justify-between">
                     <div>
                         <p id="date" class="text-lg font-medium"></p>
@@ -76,7 +76,13 @@
                     </div>
                 </div>
             </div>
+
+            <!-- 5-Day Forecast Section -->
+        <div id="forecastContainer" class="hidden w-full">
+            <h3 class="text-2xl text-blue-500 font-bold mb-6 text-center">5-Day Forecast</h3>
+            <div id="forecastCards" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4"></div>
         </div>
+    </div>
     
     <script src="script.js"></script>
 </body>
