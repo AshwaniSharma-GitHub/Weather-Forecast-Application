@@ -1,4 +1,4 @@
-const API_KEY = 'b7c2df8c530350b3c0834ac4506e1d7b';
+const API_KEY = 'b7c2df8c530350b3c0834ac4506e1d7b'; // OpenWeatherMap API
 const cityInput = document.getElementById('city');
 const searchBtn = document.getElementById('searchBtn');
 const locationBtn = document.getElementById('locationBtn');
@@ -14,6 +14,7 @@ const forecastCards = document.getElementById('forecastCards');
 const recentSearchesContainer = document.getElementById('recentSearchesContainer');
 const recentSearches = document.getElementById('recentSearches');
 
+// Event listener for search button
 searchBtn.addEventListener('click', () => {
     const city = cityInput.value.trim();
     if (city) {
@@ -22,6 +23,7 @@ searchBtn.addEventListener('click', () => {
     }
 });
 
+// Event listener for current location button
 locationBtn.addEventListener('click', () => {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition((position) => {
@@ -33,6 +35,7 @@ locationBtn.addEventListener('click', () => {
     }
 });
 
+// Fetch weather by city name
 async function getWeatherByCity(city) {
     try {
         const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric`);
@@ -48,6 +51,7 @@ async function getWeatherByCity(city) {
     }
 }
 
+// Fetch weather by geolocation
 async function getWeatherByLocation(lat, lon) {
     try {
         const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`);
@@ -63,6 +67,7 @@ async function getWeatherByLocation(lat, lon) {
     }
 }
 
+// Display current weather
 function displayCurrentWeather(data) {
     // Get current date and format it
     const currentDate = new Date();
@@ -84,6 +89,7 @@ function displayCurrentWeather(data) {
     currentWeatherContainer.classList.remove('hidden');
 }
 
+// Fetch 5-days forecast
 async function getForecast(lat, lon) {
     try {
         const response = await fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`);
@@ -94,7 +100,7 @@ async function getForecast(lat, lon) {
     }
 }
 
-// 5-days forecast
+// Display 5-days forecast
 function displayForecast(data) {
     forecastCards.innerHTML = '';
 
@@ -114,6 +120,7 @@ function displayForecast(data) {
     forecastContainer.classList.remove('hidden');
 }
 
+// Save to local storage for recently searched cities
 function saveToLocalStorage(city) {
     let cities = JSON.parse(localStorage.getItem('recentCities')) || [];
     if (!cities.includes(city)) {
@@ -123,6 +130,7 @@ function saveToLocalStorage(city) {
     }
 }
 
+// Update the recent searches in dropdown
 function updateRecentSearchesDropdown(cities) {
     recentSearches.innerHTML = '';
     cities.forEach(city => {
@@ -134,6 +142,7 @@ function updateRecentSearchesDropdown(cities) {
     recentSearchesContainer.classList.remove('hidden');
 }
 
+// Load recently searched cities on page load
 window.onload = function () {
     const cities = JSON.parse(localStorage.getItem('recentCities')) || [];
     if (cities.length > 0) {
@@ -148,6 +157,7 @@ window.onload = function () {
     });
 };
 
+// capitalize the first letter of the weather description
 function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
